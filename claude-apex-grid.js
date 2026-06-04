@@ -1,7 +1,7 @@
 class ClaudeApexGrid {
-  constructor(containerId, options = {}) {
-    this.container = document.getElementById(containerId);
-    if (!this.container) throw new Error(`Container with ID '${containerId}' not found`);
+  constructor(options = {}) {
+    this.container = document.getElementById(options.containerId);
+    if (!this.container) throw new Error(`Container with ID '${options.containerId}' not found`);
     this.options = {
       columns: [], data: [], expanderColumn: 0, autoExpandLevel: 0, showHeader: true,
       tableClasses: 'w-full border-collapse bg-white shadow-lg rounded-lg overflow-hidden',
@@ -27,7 +27,7 @@ class ClaudeApexGrid {
     this.container.appendChild(this.table);
   }
 
-    createHeader() {
+  createHeader() {
     const thead = document.createElement('thead');
     thead.className = this.options.headerClasses;
     const headerRow = document.createElement('tr');
@@ -49,8 +49,10 @@ class ClaudeApexGrid {
   flattenDataRecursive(data, level, parentId) {
     data.forEach(item => {
       const id = ++this.rowIdCounter;
-      const flatItem = { ...item, _id: id, _level: level, _parentId: parentId,
-        _hasChildren: item.children && item.children.length > 0, _visible: level === 0 };
+      const flatItem = {
+        ...item, _id: id, _level: level, _parentId: parentId,
+        _hasChildren: item.children && item.children.length > 0, _visible: level === 0
+      };
       this.flattenedData.push(flatItem);
       if (item.children && item.children.length > 0) {
         this.flattenDataRecursive(item.children, level + 1, id);
